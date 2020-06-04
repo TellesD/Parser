@@ -3,9 +3,9 @@ const fs = require('fs');
 
 const games = [];
 let game = [];
-game.kill=0;
+game.kill = 0;
 game.players = [];
-game.kills=[];
+game.kills = [];
 
 
 
@@ -26,17 +26,17 @@ let z = []
 rl.on('line', (line) => {
 
   if (line.indexOf("ShutdownGame:") != -1) {
-    
+
     let gamex = game
     games[x] = gamex;
     x++
     game = [];
-    game.kill=0;
+    game.kill = 0;
     game.players = [];
-    game.kills=[];
-    y= 0
+    game.kills = [];
+    y = 0
     z = []
-    
+
 
 
   }
@@ -44,7 +44,7 @@ rl.on('line', (line) => {
   if (line.indexOf("ClientUserinfoChanged:") != -1) {
     let data = line.split("n\\")
     data = data[1].split("\\")
-    if (game.players.indexOf(data[0])=== -1) game.players.push(data[0])
+    if (game.players.indexOf(data[0]) === -1) game.players.push(data[0])
 
 
 
@@ -53,26 +53,31 @@ rl.on('line', (line) => {
 
   if (line.indexOf("Kill:") != -1) {
     let data = line.split("killed");
-     game.kill++
+    game.kill++
 
-   /*  if(data[0].indexOf("<world>") != -1){
-        y= y+1
-       game.kills["<world>"] = y
+    if (data[0].indexOf("<world>") != -1) {
+      for (let cont = 0; cont < game.players.length; cont++) {
+        if (data[1].indexOf(game.players[cont]) != -1) {
+          if (!z[cont]) z[cont] = 0
+          z[cont]--
+          game.kills[game.players[cont]] = z[cont]
+        }
+      }
 
-     }*/
-     
-     for(let cont=0; cont < game.players.length; cont++){
-      
-     if(data[0].indexOf(game.players[cont]) != -1){
-      if(!z[cont]) z[cont] = 0
-      z[cont] ++
-     game.kills[game.players[cont]]= z[cont] 
-    
-    
-   } 
-   
-  }
-    
+    }
+
+    for (let cont = 0; cont < game.players.length; cont++) {
+
+      if (data[0].indexOf(game.players[cont]) != -1) {
+        if (!z[cont]) z[cont] = 0
+        z[cont]++
+        game.kills[game.players[cont]] = z[cont]
+
+
+      }
+
+    }
+
 
 
 
@@ -84,6 +89,6 @@ rl.on('line', (line) => {
 
 rl.on('close', () => {
   console.log('acabou!');
-  console.log(games)
+  console.log(games[1])
 
 });
