@@ -1,11 +1,17 @@
 const readline = require('readline');
 const fs = require('fs');
 
-const games = [];
+let jogos = [];
 let game = [];
-game.kill = 0;
+game.total_kills = 0;
 game.players = [];
 game.kills = [];
+
+let games = {}
+
+
+
+
 
 
 
@@ -19,19 +25,21 @@ const rl = readline.createInterface({
 
 
 let x = 0
-let y = 0
 let z = []
-
+let i = 0
 
 rl.on('line', (line) => {
 
   if (line.indexOf("ShutdownGame:") != -1) {
-
     let gamex = game
-    games[x] = gamex;
+    jogos[x] = gamex;
+
+
+
+
     x++
     game = [];
-    game.kill = 0;
+    game.total_kill = 0;
     game.players = [];
     game.kills = [];
     y = 0
@@ -44,7 +52,10 @@ rl.on('line', (line) => {
   if (line.indexOf("ClientUserinfoChanged:") != -1) {
     let data = line.split("n\\")
     data = data[1].split("\\")
-    if (game.players.indexOf(data[0]) === -1) game.players.push(data[0])
+    if (game.players.indexOf(data[0]) === -1) {
+
+      game.players.push(data[0])
+    }
 
 
 
@@ -53,7 +64,7 @@ rl.on('line', (line) => {
 
   if (line.indexOf("Kill:") != -1) {
     let data = line.split("killed");
-    game.kill++
+    game.total_kill++
 
     if (data[0].indexOf("<world>") != -1) {
       for (let cont = 0; cont < game.players.length; cont++) {
@@ -89,6 +100,20 @@ rl.on('line', (line) => {
 
 rl.on('close', () => {
   console.log('acabou!');
-  console.log(games[1])
+  console.log(jogos)
+
+  jogos.forEach((element, index) => {
+    games['game_'+index] = {}={
+
+    "total_kills ": element.total_kill,
+    "players ": element.players
+  }
+
+  
+  
+  })
+  
+  console.log(games)
+
 
 });
