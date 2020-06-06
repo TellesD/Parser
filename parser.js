@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const funcoes = require('./function');
 const readline = require('readline');
 const fs = require('fs');
 
@@ -17,7 +17,7 @@ let games = {};
 
 
 
-
+//Read log
 const rl = readline.createInterface({
   input: fs.createReadStream('./arquivos/games.log')
 });
@@ -27,9 +27,10 @@ const rl = readline.createInterface({
 let x = 0;
 let z = [];
 
+//Agroup data 
 rl.on('line', (line) => {
 
-
+  //End game
   if (line.indexOf("ShutdownGame:") != -1) {
     let gamex = game;
     jogos[x] = gamex;
@@ -45,20 +46,20 @@ rl.on('line', (line) => {
   };
 
 
-
+  //Join player
   if (line.indexOf("ClientUserinfoChanged:") != -1) {
     let data = line.split("n\\");
     data = data[1].split("\\");
 
-    if (game.players.indexOf(" " + data[0] + " ") === -1) {
+    if (game.players.indexOf(data[0]) === -1) {
 
-      game.players.push(" " + data[0] + " ");
+      game.players.push(data[0]);
     };
 
   };
 
 
-
+  //kill
   if (line.indexOf("Kill:") != -1) {
     let data = line.split("killed");
     game.total_kill++;
@@ -73,11 +74,7 @@ rl.on('line', (line) => {
       };
 
     };
-
-
-
     for (let cont = 0; cont < game.players.length; cont++) {
-
       if (data[0].indexOf(game.players[cont]) != -1) {
         if (!z[cont]) z[cont] = 0;
         z[cont]++;
@@ -88,42 +85,30 @@ rl.on('line', (line) => {
 
     };
   };
-
-
 });
 
 
-
+//End parser
 rl.on('close', () => {
-  console.log('acabou!');
-  console.log(jogos[1]);
-
-  jogos.forEach((element, index) => {
-    if (!element.total_kill) element.total_kill = 0
-   
-    games[`game_${index}`] = {} = {
-
-      total_kills: element.total_kill,
-      players: element.players,
-      "kills": element.kills
-    }
-
-  });
-  console.log(games)
-
+  //Hash 
+  games = funcoes.montarHash(jogos);
 
 });
 
+//HTTP requisitions
 router.get('/games', (req, res) => {
-  
-  return res.send(games);
+  retorno = funcoes.buscarGames(games);
+
+  return res.send(retorno);
 })
 
 router.get('/game/:id', (req, res) => {
   const id = req.params.id;
- 
-  return res.send(games[`game_${id}`]);
+  retorno = funcoes.buscarGames(games, `game_${id}`);
+
+  return res.send(retorno);
 })
+
 
 
 module.exports = router;
