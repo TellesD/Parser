@@ -5,6 +5,8 @@ const functions = {
       return games;
     }
     else {
+      if (!games[x]) return "game não encontrado"
+
       return games[x]
     }
   },
@@ -32,7 +34,6 @@ const functions = {
 
 
   ranking(jogos, players) {
-    let j = jogos.length
     let i = players.length;
     let game_ranking = {}
     let ranking = []
@@ -64,6 +65,8 @@ const functions = {
         kills: element.kills
       }
     })
+
+    console.log(game_ranking)
     return (game_ranking);
 
   },

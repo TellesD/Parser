@@ -113,7 +113,7 @@ rl.on('close', () => {
 //HTTP requisitions
 router.get('/games', (req, res) => {
   retorno = funcoes.buscarGames(games);
-
+  console.log(jogos)
   return res.send(retorno);
 })
 
