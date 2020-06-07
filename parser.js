@@ -14,6 +14,8 @@ game.kills = [];
 
 let games = {};
 
+let ranking = [];
+ranking.players = [];
 
 
 
@@ -26,6 +28,7 @@ const rl = readline.createInterface({
 
 let x = 0;
 let z = [];
+let p = 0
 
 //Agroup data 
 rl.on('line', (line) => {
@@ -35,6 +38,7 @@ rl.on('line', (line) => {
     let gamex = game;
     jogos[x] = gamex;
 
+  
 
     x++;
     game = [];
@@ -54,7 +58,16 @@ rl.on('line', (line) => {
     if (game.players.indexOf(data[0]) === -1) {
 
       game.players.push(data[0]);
+      
     };
+
+    if (ranking.players.indexOf(data[0]) === -1) {
+
+      ranking.players.push(data[0]);
+      
+    };
+
+  
 
   };
 
@@ -79,11 +92,12 @@ rl.on('line', (line) => {
         if (!z[cont]) z[cont] = 0;
         z[cont]++;
         game.kills[game.players[cont]] = z[cont];
-
-
       };
 
     };
+    if (data[0].indexOf("<world>") != -1) {
+
+    }
   };
 });
 
@@ -92,6 +106,7 @@ rl.on('line', (line) => {
 rl.on('close', () => {
   //Hash 
   games = funcoes.montarHash(jogos);
+
 
 });
 
@@ -105,6 +120,14 @@ router.get('/games', (req, res) => {
 router.get('/game/:id', (req, res) => {
   const id = req.params.id;
   retorno = funcoes.buscarGames(games, `game_${id}`);
+
+  return res.send(retorno);
+})
+
+router.get('/ranking', (req, res) => {
+  
+  
+ retorno = funcoes.ranking(jogos, ranking.players);
 
   return res.send(retorno);
 })
