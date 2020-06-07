@@ -15,7 +15,7 @@ app.use('/parser', parserRoute);
 app.listen(3000, () => {
   console.log("Exibir partidas: http://localhost:3000/parser/games");
   console.log("Procurar partida: http://localhost:3000/parser/game/ID_da_partida");
-  console.log("Procurar partida: http://localhost:3000/parser/ranking");
+  console.log("Exibir ranking: http://localhost:3000/parser/ranking");
   
 })
   
