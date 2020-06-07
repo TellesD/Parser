@@ -38,7 +38,7 @@ rl.on('line', (line) => {
     let gamex = game;
     jogos[x] = gamex;
 
-  
+
 
     x++;
     game = [];
@@ -58,16 +58,16 @@ rl.on('line', (line) => {
     if (game.players.indexOf(data[0]) === -1) {
 
       game.players.push(data[0]);
-      
+
     };
 
     if (ranking.players.indexOf(data[0]) === -1) {
 
       ranking.players.push(data[0]);
-      
+
     };
 
-  
+
 
   };
 
@@ -113,22 +113,22 @@ rl.on('close', () => {
 //HTTP requisitions
 router.get('/games', (req, res) => {
   retorno = funcoes.buscarGames(games);
-  console.log(jogos)
+  console.log(retorno)
   return res.send(retorno);
 })
 
 router.get('/game/:id', (req, res) => {
   const id = req.params.id;
   retorno = funcoes.buscarGames(games, `game_${id}`);
-
+  console.log(retorno)
   return res.send(retorno);
 })
 
 router.get('/ranking', (req, res) => {
-  
-  
- retorno = funcoes.ranking(jogos, ranking.players);
 
+
+  retorno = funcoes.ranking(jogos, ranking.players);
+  console.log(retorno)
   return res.send(retorno);
 })
 
