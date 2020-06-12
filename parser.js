@@ -95,9 +95,6 @@ rl.on('line', (line) => {
       };
 
     };
-    if (data[0].indexOf("<world>") != -1) {
-
-    }
   };
 });
 
